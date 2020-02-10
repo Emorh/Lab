@@ -90,3 +90,10 @@ Flist &Flist::operator>>(int &val)
     add(val);
     return *this;
 }
+
+void Flist::get(int ind, int &tmp)
+{
+    //this->seekg(3*sizeof(int) + sizeof(int)*(2*ind - 1));
+    this->seekg(sizeof(int) * (2*ind + 2));
+    tmp = fread<int>();
+}

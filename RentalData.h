@@ -24,6 +24,8 @@ public:
         friend Flist &operator<<(Flist &, const RentalData &);
 
         friend Flist &operator>>(Flist &, RentalData &);
+
+
         // ~
     };
 

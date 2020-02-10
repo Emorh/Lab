@@ -29,6 +29,12 @@ public:
     Flist &operator>>(int &);
 
     int &operator<<(int&);
+
+    void get(int ind, char& var);
+    void get(int ind, short& var);
+    void get(int ind, int& var);
+    void get(int ind, double& var);
+
 };
 
 
