@@ -39,10 +39,11 @@ char String::operator[](const int &n) const {
 /*
 Flist &operator<<(Flist &of, const String &s) {
 
-   of << s.len;
-   for (int i = 0; i < s.len; ++i) {
-       of.fwrite(s[i]);
+    int l = s.length();
+    of << l;
+    for (int i = 0; i < l; ++i) {
+        of.fwrite(s[i]);
    }
    return of;
 }
- */
+*/

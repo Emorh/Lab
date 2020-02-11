@@ -1,23 +1,26 @@
 #include <iostream>
 #include "Flist.h"
+#include "RentalData.h"
 
 int main() {
     Flist list;
 
-    int a = 3;
-    list >> a;
+    int a = 2;
+    list << a;
+    a = -1;
+    list << a;
     a = 3;
-    list >> a;
-    a = 4;
-    list >> a;
+    list << a;
+    a = 1;
+    list << a;
+    a = 8;
+    list << a;
 
-    for (int i = 1; i <= 3; ++i)
+    for (int i = 1; i <= list.len(); ++i)
     {
-        int var;
-        list.get(i, var);
-        cout << var << " ";
+        cout << list.extr<int>(i) << " ";
     }
-    cout << endl;
+
 
     return 0;
 }
