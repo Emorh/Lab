@@ -24,7 +24,11 @@ public:
     // ~
     char operator[](const int &) const;
 
+    void addStr(Flist &) const;
+
     friend Flist &operator<<(Flist &, const String &);
+
+    friend Flist &operator>>(Flist &, String &);
     // ~
 };
 

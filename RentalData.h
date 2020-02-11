@@ -11,7 +11,7 @@
 class RentalData {
 public:
     class DateAndTime {
-        short day;
+        short day; // попробовать сделать char-ы
         short mon;
         short year;
         short hour;
@@ -23,8 +23,6 @@ public:
         friend Flist &operator<<(Flist &, const RentalData &);
 
         friend Flist &operator>>(Flist &, RentalData &);
-
-
         // ~
     };
 
@@ -45,9 +43,6 @@ public:
 
     friend Flist &operator>>(Flist &, RentalData &);
     friend Flist &operator<<(Flist &is, const RentalData &rd);
-    // ~
-
-    // ~
 };
 
 

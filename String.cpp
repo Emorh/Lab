@@ -36,14 +36,31 @@ char String::operator[](const int &n) const {
     throw "String out of range";
 }
 
-/*
+void String::addStr(Flist &of) const {
+    for (int i = 0; i < len; ++i) {
+        of.fwrite(str[i]);
+    }
+}
+
 Flist &operator<<(Flist &of, const String &s) {
 
     int l = s.length();
     of << l;
-    for (int i = 0; i < l; ++i) {
-        of.fwrite(s[i]);
-   }
-   return of;
+    s.addStr(of);
+    return of;
 }
-*/
+
+Flist &operator>>(Flist &is, String &s) {
+    is >> s.len;
+    s.str = new char[s.len + 1];
+    if (s.str == nullptr) { // Обработка ошибки
+        s.len = 0;
+        return is;
+    }
+    for (int i = 0; i < s.len; ++i) {
+        is >> s.str[i];
+    }
+    s.str[s.len] = '\0';
+    return is;
+}
+// ~
