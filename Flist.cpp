@@ -78,7 +78,7 @@ Flist::Flist(char name[])
     }
     this->name[strlen(name)] = '\0';
 
-    open(name, ios::binary | ios::out | ios::in | ios::ate | ios::trunc);
+    open(name, ios::binary | ios::out | ios::in | ios::ate);
 
     if (!(*this))                 // Если есть какие-то проблемы с файлом
     {

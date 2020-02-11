@@ -37,8 +37,6 @@ private:
 public:
     RentalData();
 
-    void extr(Flist& list, int& num, RentalData& data);
-
     void inp();
 
     friend Flist &operator>>(Flist &, RentalData &);

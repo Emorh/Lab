@@ -63,4 +63,3 @@ Flist &operator>>(Flist &is, String &s) {
     s.str[s.len] = '\0';
     return is;
 }
-// ~

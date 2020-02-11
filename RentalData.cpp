@@ -29,17 +29,6 @@ void RentalData::inp() {
     cin >> surname;
 }
 
-
-void RentalData::extr(Flist &list, int &num, RentalData& data)
-{
-    if (list.len() == 0 || num < 1 || num > list.len())
-    {
-        throw "Array index of range";                          /////////////////////////////////// Изменить
-    }
-
-}
-
-// ~
 Flist &operator>>(Flist &is, RentalData::DateAndTime &dt) {
     is >> dt.day;
     is >> dt.mon;
@@ -75,4 +64,3 @@ Flist &operator>>(Flist &is, RentalData &rd) {
     is >> rd.surname;
     return is;
 }
-// ~

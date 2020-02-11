@@ -14,7 +14,7 @@ class Flist : fstream {
 
     char* name;
 
-    const int number_of_records = 3;
+    const int number_of_records = 8;
 
     template <typename T>
     void add(const T &dat);
@@ -211,6 +211,49 @@ public:
             }
             cout << endl;
         }
+    }
+
+    template <typename T>
+    void compression()
+    {
+        {
+            Flist tmp((char *) "tmp.bin");
+            seekg(2 * sizeof(int));
+            int length = len();
+
+            for (int i = 1; i <= length; ++i)
+            {
+                tmp.add(extr<T>(i));
+            }
+        }
+
+        close();
+
+        if (remove(name))
+        {
+            cerr << "Can't remove " << name;
+            exit(2);
+        }
+
+        if (rename("tmp.bin", name))
+        {
+            cerr << "Can't rename file tmp.bin";
+            exit(3);
+        }
+
+        open(name, ios::binary | ios::out | ios::in | ios::ate);
+        if (!*this)
+        {
+            cerr << "Can't open " << name;
+            exit(1);
+        }
+    }
+
+    template <typename T>
+    void insWithOrder(T& data)
+    {
+        *this << data;
+        this->sort<T>();
     }
 
     Flist  &operator<<(char &);
