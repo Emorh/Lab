@@ -13,6 +13,7 @@ istream &operator>>(istream &is, RentalData::DateAndTime &dt) {
     cin >> dt.day >> c >> dt.mon >> c >> dt.year;
     cout << "\tHour: ";
     cin >> dt.hour;
+    return is;
 }
 
 ostream &operator<<(ostream &os, RentalData::DateAndTime &dt) {
@@ -20,6 +21,7 @@ ostream &operator<<(ostream &os, RentalData::DateAndTime &dt) {
     cout << setw(2) << setfill('0') << dt.mon << '.';
     cout << dt.year << ' ';
     cout << setw(2) << setfill('0') << dt.hour;
+    return os;
 }
 
 Flist &operator>>(Flist &ifl, RentalData::DateAndTime &dt) {
@@ -58,8 +60,9 @@ istream &operator>>(istream &is, RentalData &rd) {
     return is;
 }
 
-ostream &operator<<(ostream &, const RentalData &) {
+ostream &operator<<(ostream &os, const RentalData &rd) {
     cout << "Item: ";
+    return os;
 }
 
 Flist &operator>>(Flist &ifl, RentalData &rd) {

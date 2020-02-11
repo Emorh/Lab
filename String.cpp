@@ -44,6 +44,7 @@ void String::addStr(Flist &of) const {
 
 ostream &operator<<(ostream &os, const String &s) {
     cout << s.str;
+    return os;
 }
 
 Flist &operator>>(Flist &ifl, String &s) {
