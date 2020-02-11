@@ -10,9 +10,20 @@
 istream &operator>>(istream &is, RentalData::DateAndTime &dt) {
     char c;
     cout << "\tDay, month and year in the format 31.01.2020: ";
-    cin >> dt.day >> c >> dt.mon >> c >> dt.year;
-    cout << "\tHour: ";
-    cin >> dt.hour;
+    cin >> dt.day;
+    if (dt.day >= 0)
+    {
+        cin >> c >> dt.mon >> c >> dt.year;
+        cout << "\tHour: ";
+        cin >> dt.hour;
+    }
+    else
+    {
+        dt.mon = -1;
+        dt.year = -1;
+        dt.hour = -1;
+    }
+
     return is;
 }
 

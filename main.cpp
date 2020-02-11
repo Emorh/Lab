@@ -36,7 +36,7 @@ void Menu(Flist& list)
                 cout << "Data added" << endl;
                 break;
             case '2':
-                if (len != 0) { // ВЫНЕСТИ В ФУНКЦИЮ!
+                if (len != 0) {
                     cout << "Enter a number up to " << len << ": ";
                     cin >> num;
                     if (num < 1 || num > len) {
@@ -116,7 +116,8 @@ void Menu(Flist& list)
 int main() {
     Flist list;
 
-    Menu<int>(list);
+    //Menu<int>(list);
+
 
     return 0;
 }

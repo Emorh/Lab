@@ -23,12 +23,13 @@ public:
 
         friend Flist &operator>>(Flist &, DateAndTime &);
 
-
         friend Flist &operator<<(Flist &, const RentalData &);
 
         friend Flist &operator>>(Flist &, RentalData &);
         // ~
     };
+
+    bool operator>(RentalData& dt) { return cost > dt.cost; }
 
 private:
     String item; // УДАЛИТЬ СТРОКИ В ДЕСТРУКТОРЕ
