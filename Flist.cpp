@@ -107,8 +107,6 @@ Flist::~Flist()
     close();
 }
 
-
-
 Flist &Flist::operator<<(char &val)
 {
     add<char>(val);
@@ -131,6 +129,31 @@ Flist &Flist::operator<<(double &val)
 {
     add<double>(val);
     return *this;
+}
+
+void Flist::swap(const int &lPrev) {
+    int left, mid, right;
+    seekg(lPrev);
+    left = fread<int>();
+    seekg(left);
+    mid = fread<int>();
+    seekg(mid);
+    right = fread<int>();
+
+    // Нужно получить
+    // | mid | -> | right | -> | left | -> | rNext | -> ...
+    // (lPrev)     (left)     (mid)        (right)
+    seekp(lPrev);
+    fwrite(mid);
+    seekp(left);
+    fwrite(right);
+    seekp(mid);
+    fwrite(left);
+    // Обновление конца
+    if (right == 0) {
+        seekp(sizeof(int));
+        fwrite(left);
+    }
 }
 
 char &Flist::operator>>(char & val)

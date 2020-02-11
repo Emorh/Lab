@@ -149,7 +149,53 @@ public:
         return true;
     }
 
+    void swap(const int &lPrev) ;
 
+    template <typename T>
+    void sort() {
+        int len = this->len();
+        if (len < 2) {
+            return;
+        }
+
+        for (int j = 1; j < len; ++j) {
+            bool flag = false;
+            int lPrevPos, lPos, rPos;
+            T lVal, rVal;
+            seekg(0);
+            lPrevPos = 0;
+            lPos = fread<int>();
+            seekg(lPos);
+            rPos = fread<int>();
+            *this >> lVal;
+            seekg(rPos + sizeof(int));
+            *this >> rVal;
+
+            for (int i = 1; i <= len - j; ++i) {
+                if (lVal > rVal) {
+                    this->swap(lPrevPos);
+                    flag = true;
+                }
+                // Сдвиг пузыря
+                seekg(lPrevPos);
+                lPrevPos = fread<int>();
+                seekg(lPrevPos);
+                lPos = fread<int>();
+                seekg(lPos);
+                rPos = fread<int>();
+                *this >> lVal;
+                if (rPos != 0) {
+                    seekg(rPos + sizeof(int));
+                    *this >> rVal;
+                } else {
+                    break;
+                }
+            }
+            if (!flag) {
+                break;
+            }
+        }
+    }
 
     Flist  &operator<<(char &);
     Flist  &operator<<(short &);
