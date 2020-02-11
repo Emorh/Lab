@@ -4,7 +4,15 @@
 
 int main() {
     Flist list;
+    RentalData rd;
+    rd.inp();
+    list << rd;
 
+    list.Set(1);
+    RentalData rd1;
+    list >> rd1;
+
+    /*
     int a = 2;
     list << a;
     a = -1;
@@ -20,7 +28,7 @@ int main() {
     {
         cout << list.extr<int>(i) << " ";
     }
-
+*/
 
     return 0;
 }

@@ -13,53 +13,7 @@ void RentalData::DateAndTime::inp() {
     cin >> hour;
 }
 
-/*
-// ~
-Flist &operator>>(Flist &is, RentalData::DateAndTime &dt) {
-    is >> dt.day;
-    is >> dt.mon;
-    is >> dt.year;
-    is >> dt.hour;
-    return is;
-}
-// ~
-*/
-
 RentalData::RentalData() : item(), cost(0.0), get(), retrieve(), surname() {}
-
-// ~
-/*
-Flist &operator<<(Flist &of, const RentalData &rd) {
-    of << rd.item;
-    of.fwrite(rd.cost);
-
-    of.fwrite(rd.get.day);
-    of.fwrite(rd.get.mon);
-    of.fwrite(rd.get.year);
-    of.fwrite(rd.get.hour);
-
-    of.fwrite(rd.retrieve.day);
-    of.fwrite(rd.retrieve.mon);
-    of.fwrite(rd.retrieve.year);
-    of.fwrite(rd.retrieve.hour);
-
-    **************************************************
-    of.fwrite(rd.surname.length());
-    for (int i = 0; i < rd.surname.length(); ++i) {
-        try {
-            of.fwrite(rd.surname[i]);
-        }
-        catch (char err[]) {
-            cerr << err;
-            break;
-        }
-    } ********************************************
-    of << rd.surname;
-
-    return of;
-}
-*/
-// ~
 
 void RentalData::inp() {
     cout << endl;
@@ -83,12 +37,36 @@ void RentalData::extr(Flist &list, int &num, RentalData& data)
         throw "Array index of range";                          /////////////////////////////////// Изменить
     }
 
-
-
-
 }
-/*
+
 // ~
+Flist &operator>>(Flist &is, RentalData::DateAndTime &dt) {
+    is >> dt.day;
+    is >> dt.mon;
+    is >> dt.year;
+    is >> dt.hour;
+    return is;
+}
+
+Flist &operator<<(Flist &of, const RentalData &rd) {
+    of << rd.item;
+    of.fwrite(rd.cost);
+
+    of.fwrite(rd.get.day);
+    of.fwrite(rd.get.mon);
+    of.fwrite(rd.get.year);
+    of.fwrite(rd.get.hour);
+
+    of.fwrite(rd.retrieve.day);
+    of.fwrite(rd.retrieve.mon);
+    of.fwrite(rd.retrieve.year);
+    of.fwrite(rd.retrieve.hour);
+
+    of.fwrite(rd.surname.length());
+    rd.surname.addStr(of);
+    return of;
+}
+
 Flist &operator>>(Flist &is, RentalData &rd) {
     is >> rd.item;
     is >> rd.cost;
@@ -98,4 +76,3 @@ Flist &operator>>(Flist &is, RentalData &rd) {
     return is;
 }
 // ~
- */
