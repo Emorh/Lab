@@ -1,34 +1,37 @@
 
-#include <iostream>
+//#include <iostream>
+#include <iomanip>
 #include "RentalData.h"
 #include "String.h"
 
 //using namespace std;
 
-void RentalData::DateAndTime::inp() {
+// ~
+istream &operator>>(istream &is, RentalData::DateAndTime &dt) {
     char c;
     cout << "\tDay, month and year in the format 31.01.2020: ";
-    cin >> day >> c >> mon >> c >> year;
+    cin >> dt.day >> c >> dt.mon >> c >> dt.year;
     cout << "\tHour: ";
-    cin >> hour;
+    cin >> dt.hour;
 }
+
+ostream &operator<<(ostream &os, RentalData::DateAndTime &dt) {
+    cout << setw(2) << setfill('0') << dt.day << '.';
+    cout << setw(2) << setfill('0') << dt.mon << '.';
+    cout << dt.year << ' ';
+    cout << setw(2) << setfill('0') << dt.hour;
+}
+
+Flist &operator>>(Flist &ifl, RentalData::DateAndTime &dt) {
+    ifl >> dt.day;
+    ifl >> dt.mon;
+    ifl >> dt.year;
+    ifl >> dt.hour;
+    return ifl;
+}
+// ~
 
 RentalData::RentalData() : item(), cost(0.0), get(), retrieve(), surname() {}
-
-void RentalData::inp() {
-    cout << endl;
-    cout << "\tRental item: ";
-    cin >> item;
-    cout << "\tCost: ";
-    cin >> cost;
-    cout << "\tEnter date and time of receipt" << endl;
-    get.inp();
-    cout << "\tEnter date and time of return" << endl;
-    retrieve.inp();
-    cout << "\tSurname: ";
-    cin >> surname;
-}
-
 
 void RentalData::extr(Flist &list, int &num, RentalData& data)
 {
@@ -40,12 +43,32 @@ void RentalData::extr(Flist &list, int &num, RentalData& data)
 }
 
 // ~
-Flist &operator>>(Flist &is, RentalData::DateAndTime &dt) {
-    is >> dt.day;
-    is >> dt.mon;
-    is >> dt.year;
-    is >> dt.hour;
+istream &operator>>(istream &is, RentalData &rd) {
+    cout << endl;
+    cout << "\tRental item: ";
+    cin >> rd.item;
+    cout << "\tCost: ";
+    cin >> rd.cost;
+    cout << "\tEnter date and time of receipt" << endl;
+    cin >> rd.get;
+    cout << "\tEnter date and time of return" << endl;
+    cin >> rd.retrieve;
+    cout << "\tSurname: ";
+    cin >> rd.surname;
     return is;
+}
+
+ostream &operator<<(ostream &, const RentalData &) {
+    cout << "Item: ";
+}
+
+Flist &operator>>(Flist &ifl, RentalData &rd) {
+    ifl >> rd.item;
+    ifl >> rd.cost;
+    ifl >> rd.get;
+    ifl >> rd.retrieve;
+    ifl >> rd.surname;
+    return ifl;
 }
 
 Flist &operator<<(Flist &of, const RentalData &rd) {
@@ -65,14 +88,5 @@ Flist &operator<<(Flist &of, const RentalData &rd) {
     of.fwrite(rd.surname.length());
     rd.surname.addStr(of);
     return of;
-}
-
-Flist &operator>>(Flist &is, RentalData &rd) {
-    is >> rd.item;
-    is >> rd.cost;
-    is >> rd.get;
-    is >> rd.retrieve;
-    is >> rd.surname;
-    return is;
 }
 // ~

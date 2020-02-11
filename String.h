@@ -26,9 +26,11 @@ public:
 
     void addStr(Flist &) const;
 
-    friend Flist &operator<<(Flist &, const String &);
+    friend ostream &operator<<(ostream &, const String &);
 
     friend Flist &operator>>(Flist &, String &);
+
+    friend Flist &operator<<(Flist &, const String &);
     // ~
 };
 

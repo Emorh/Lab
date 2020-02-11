@@ -42,25 +42,29 @@ void String::addStr(Flist &of) const {
     }
 }
 
+ostream &operator<<(ostream &os, const String &s) {
+    cout << s.str;
+}
+
+Flist &operator>>(Flist &ifl, String &s) {
+    ifl >> s.len;
+    s.str = new char[s.len + 1];
+    if (s.str == nullptr) { // Обработка ошибки
+        s.len = 0;
+        return ifl;
+    }
+    for (int i = 0; i < s.len; ++i) {
+        ifl >> s.str[i];
+    }
+    s.str[s.len] = '\0';
+    return ifl;
+}
+
 Flist &operator<<(Flist &of, const String &s) {
 
     int l = s.length();
     of << l;
     s.addStr(of);
     return of;
-}
-
-Flist &operator>>(Flist &is, String &s) {
-    is >> s.len;
-    s.str = new char[s.len + 1];
-    if (s.str == nullptr) { // Обработка ошибки
-        s.len = 0;
-        return is;
-    }
-    for (int i = 0; i < s.len; ++i) {
-        is >> s.str[i];
-    }
-    s.str[s.len] = '\0';
-    return is;
 }
 // ~

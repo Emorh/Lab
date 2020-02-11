@@ -16,9 +16,13 @@ public:
         short year;
         short hour;
     public:
-        void inp();
         // ~
+        friend istream &operator>>(istream &, DateAndTime &);
+
+        friend ostream &operator<<(ostream &, DateAndTime &);
+
         friend Flist &operator>>(Flist &, DateAndTime &);
+
 
         friend Flist &operator<<(Flist &, const RentalData &);
 
@@ -39,10 +43,15 @@ public:
 
     void extr(Flist& list, int& num, RentalData& data);
 
-    void inp();
+    // ~
+    friend istream &operator>>(istream &, RentalData &);
+
+    friend ostream &operator<<(ostream &, const RentalData &);
 
     friend Flist &operator>>(Flist &, RentalData &);
-    friend Flist &operator<<(Flist &is, const RentalData &rd);
+
+    friend Flist &operator<<(Flist &, const RentalData &);
+    // ~
 };
 
 
