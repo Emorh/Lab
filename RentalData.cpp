@@ -3,7 +3,7 @@
 #include "RentalData.h"
 #include "String.h"
 
-using namespace std;
+//using namespace std;
 
 void RentalData::DateAndTime::inp() {
     char c;
