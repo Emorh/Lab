@@ -14,6 +14,8 @@ class Flist : fstream {
 
     char* name;
 
+    const int number_of_records = 3;
+
     template <typename T>
     void add(const T &dat);
 
@@ -194,6 +196,20 @@ public:
             if (!flag) {
                 break;
             }
+        }
+    }
+
+    template <typename T>
+    void pageView(const int& num)
+    {
+        if (len() > (num - 1) * number_of_records)
+        {
+            cout << "Page " << num << endl;
+            for (int i = (num - 1) * number_of_records; i < len() && i < number_of_records * num; ++i)
+            {
+                cout << this->extr<T>(i + 1) << " ";
+            }
+            cout << endl;
         }
     }
 
