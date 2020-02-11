@@ -33,97 +33,85 @@ void Menu(Flist& list)
                 cout << "Enter a data: ";
                 cin >> data;
                 list << data;
-                //list.add(data);
-                cout << "Data added\n";
+                cout << "Data added" << endl;
                 break;
             case '2':
                 if (len != 0) { // ВЫНЕСТИ В ФУНКЦИЮ!
                     cout << "Enter a number up to " << len << ": ";
                     cin >> num;
-                    if (len < num) {
-                        cout << "Wrong number\n";
+                    if (num < 1 || num > len) {
+                        cout << "Wrong number" << endl;
                     } else {
-                        cout << "Extracted: " << list.extr<T>(num) << '\n';
+                        cout << "Extracted: " << list.extr<T>(num) << endl;
                     }
                 } else {
-                    cout << "List is empty\n";
+                    cout << "List is empty" << endl;
                 }
                 break;
             case '3':
                 if (len != 0) {
                     cout << "Enter a number up to " << len << ": ";
                     cin >> num;
-                    if (len < num) {
-                        cout << "Wrong number\n";
+                    if (num < 1 || num > len) {
+                        cout << "Wrong number" << endl;
                     } else {
-                        cout << "Deleted: " << list.del<T>(num) << '\n';
+                        cout << "Deleted: " << list.del<T>(num) << endl;
                     }
                 } else {
-                    cout << "List is empty\n";
+                    cout << "List is empty" << endl;
                 }
                 break;
             case '4':
                 cout << "Enter a number up to " << len + 1 << ": ";
                 cin >> num;
-                if (len + 1 < num) {
-                    cout << "Wrong number\n";
+                if (num < 1 || num > len + 1) {
+                    cout << "Wrong number" << endl;
                 } else {
                     cout << "Enter a data: ";
                     cin >> data;
-                    if (list.insByNum(num, data)) {
-                        cout << "Data inserted\n";
-                    }
+                    list.insByNum(num, data);
+                    cout << "Data inserted" << endl;
                 }
                 break;
             case '5':
                 if (len != 0) {
                     cout << "Enter a number up to " << len << ": ";
                     cin >> num;
-                    if (len < num) {
-                        cout << "Wrong number\n";
+                    if (num < 1 || num > 1) {
+                        cout << "Wrong number" << endl;
                     } else {
                         cout << "Сhange the data " << list.extr<T>(num) << " to (enter a new data): ";
                         cin >> data;
-                        if (list.edit(num, data)) {
-                            cout << "Data edited\n";
-                        }
+                        list.edit(num, data);
+                        cout << "Data edited" << endl;
                     }
                 } else {
-                    cout << "List is empty\n";
+                    cout << "List is empty" << endl;
                 }
                 break;
             case '6':
                 cout << "Enter a data: ";
                 cin >> data;
                 list.insWithOrder(data);
-                cout << "Data added\n";
+                cout << "Data added" << endl;
                 break;
             case '7':
                 list.sort<T>();
-                cout << "List sorted\n";
+                cout << "List sorted" << endl;
                 break;
             case '8':
                 int page;
                 cout << "Enter a page: ";
                 cin >> page;
-                if (page >= 1)
-                {
-                    list.pageView<T>(page);
-                }
-                else
-                {
-                    cout << "Wrong page\n";
-                }
+                list.pageView<T>(page);
                 break;
             case '9':
                 list.compression<T>();
-                cout << "List is compressed\n";
+                cout << "List is compressed" << endl;
         }
     } while (c != '0');
 
 }
-
-
 
 int main() {
     Flist list;
