@@ -8,7 +8,7 @@
 #include <iostream>
 #include "Flist.h"
 
-using namespace std;
+//using namespace std;
 
 class String {
     int len;
