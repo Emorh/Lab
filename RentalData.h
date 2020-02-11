@@ -17,7 +17,6 @@ public:
         short hour;
     public:
         void inp();
-
         // ~
         friend Flist &operator>>(Flist &, DateAndTime &);
 
@@ -35,15 +34,19 @@ private:
     DateAndTime get;
     DateAndTime retrieve;
     String surname;
+
+
 public:
     RentalData();
 
-    friend Flist &operator<<(Flist &is, const RentalData &rd);
+    void extr(Flist& list, int& num, RentalData& data);
 
     void inp();
 
-    // ~
     friend Flist &operator>>(Flist &, RentalData &);
+    friend Flist &operator<<(Flist &is, const RentalData &rd);
+    // ~
+
     // ~
 };
 

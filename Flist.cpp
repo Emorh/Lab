@@ -6,19 +6,16 @@
 #include "Flist.h"
 #include "cstring"
 
+int Flist::len()
+{
+    seekg(sizeof(int) * 2);
+    return fread<int>();
+}
 template <typename T>
 void Flist::fwrite(const T val)
 {
     this->write((char *) &val, sizeof(val));
 }
-
-template <typename T>
-T Flist::fread() {
-    T val;
-    this->read((char *) &val, sizeof(val));
-    return val;
-}
-
 template <typename T>
 void Flist::add(const T &dat) { // Добавление в конец списка
     this->seekg(0);
@@ -53,6 +50,25 @@ void Flist::add(const T &dat) { // Добавление в конец списк
     fwrite(dat); // Данные первого
 }
 
+void Flist::Set(int index)
+{
+    if (len() == 0 || index < 1 || index > len())
+    {
+        throw "sds"; /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    }
+    // Извлечение последнего -- отдельный случай для ускорения
+    if (index == len()) {
+        seekg(sizeof(int));
+        seekg(fread<int>() + sizeof(int));
+    } else {
+        seekg(0);
+        for (int i = 1; i <= index; ++i) {
+            seekg(fread<int>());
+        }
+        seekg(sizeof(int), ios::cur);
+    }
+}
+
 Flist::Flist(char name[])
 {
     this->name = new char[strlen(name) + 1];
@@ -85,15 +101,64 @@ Flist::Flist(char name[])
     }
 }
 
-Flist &Flist::operator>>(int &val)
+Flist::~Flist()
 {
-    add(val);
+    delete[] name;
+    close();
+}
+
+
+
+Flist &Flist::operator<<(char &val)
+{
+    add<char>(val);
     return *this;
 }
 
-void Flist::get(int ind, int &tmp)
+Flist &Flist::operator<<(short &val)
 {
-    //this->seekg(3*sizeof(int) + sizeof(int)*(2*ind - 1));
-    this->seekg(sizeof(int) * (2*ind + 2));
-    tmp = fread<int>();
+    add<short>(val);
+    return *this;
 }
+
+Flist &Flist::operator<<(int &val)
+{
+    add<int>(val);
+    return *this;
+}
+
+Flist &Flist::operator<<(double &val)
+{
+    add<double>(val);
+    return *this;
+}
+
+char &Flist::operator>>(char & val)
+{
+    val = fread<char>();
+    return val;
+}
+
+short &Flist::operator>>(short & val)
+{
+    val = fread<short>();
+    return val;
+}
+
+int &Flist::operator>>(int & val)
+{
+    val = fread<int>();
+    return val;
+}
+
+double &Flist::operator>>(double & val)
+{
+    val = fread<double>();
+    return val;
+}
+
+
+
+
+
+

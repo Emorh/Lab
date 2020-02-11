@@ -20,10 +20,11 @@ public:
     friend istream &operator>>(istream &is, String &s);
     int length() const;
 
+
     // ~
     char operator[](const int &) const;
 
-    // friend Flist &operator<<(Flist &, const String &);
+    friend Flist &operator<<(Flist &, const String &);
     // ~
 };
 
