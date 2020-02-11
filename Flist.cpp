@@ -54,7 +54,7 @@ void Flist::Set(int index)
 {
     if (len() == 0 || index < 1 || index > len())
     {
-        throw "sds"; /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        throw "Index out of range";
     }
     // Извлечение последнего -- отдельный случай для ускорения
     if (index == len()) {
@@ -78,7 +78,7 @@ Flist::Flist(char name[])
     }
     this->name[strlen(name)] = '\0';
 
-    open(name, ios::binary | ios::out | ios::in | ios::ate | ios::trunc);
+    open(name, ios::binary | ios::out | ios::in | ios::ate);
 
     if (!(*this))                 // Если есть какие-то проблемы с файлом
     {

@@ -14,6 +14,8 @@ class Flist : fstream {
 
     char* name;
 
+    const int number_of_records = 8;
+
     template <typename T>
     void add(const T &dat);
 
@@ -38,6 +40,11 @@ public:
     template <typename T>
     T extr(int ind)
     {
+        if (ind < 1 || ind > len())
+        {
+            throw "Index out of range";
+        }
+
         Set(ind);
         T tmp;
         *this >> tmp;
@@ -46,8 +53,11 @@ public:
 
     template <typename T>
     T del(const int &num) {
-        static_assert(is_integral<T>::value || is_floating_point<T>::value,
-                      "Argument should be of integral or floating point type");
+        if (num < 1 || num > len())
+        {
+            throw "Index out of range";
+        }
+
         T ans = extr<T>(num);
 
         int prevPos = 0;
@@ -76,14 +86,14 @@ public:
     }
 
     template <typename T>
-    bool insByNum(const int &num, T &dat) {
+    void insByNum(const int &num, T &dat) {
         if (len() + 1 < num || num < 1) {
-            return false;
+            throw "Index out of range";
         }
 
         if (num == (len() + 1)) {
             *this << dat;
-            return true;
+            return;
         }
 
         seekg(sizeof(int));
@@ -105,7 +115,7 @@ public:
 
             seekp(cur_pos);
             fwrite(next_pos);
-            return true;
+            return;
         }
         Set(num - 1);
         seekg(-sizeof(int), ios::cur);
@@ -126,14 +136,14 @@ public:
 
         seekp(cur_pos);
         fwrite(next_pos);
-        return true;
+        return;
     }
 
     template<typename T>
-    bool edit(const int &num, T &dat) {
+    void edit(const int &num, T &dat) {
         int len = this->len();
         if (len == 0 || len < num) {
-            return false;
+            throw "Index out of range";
         }
 
         T tmp = this->del<T>(num);
@@ -146,7 +156,6 @@ public:
         {
             insByNum(num, dat);
         }
-        return true;
     }
 
     void swap(const int &lPrev) ;
@@ -195,6 +204,67 @@ public:
                 break;
             }
         }
+    }
+
+    template <typename T>
+    void pageView(const int& num)
+    {
+        if (len() > (num - 1) * number_of_records)
+        {
+            cout << "Page " << num << endl;
+            for (int i = (num - 1) * number_of_records; i < len() && i < number_of_records * num; ++i)
+            {
+                cout << this->extr<T>(i + 1) << " ";
+            }
+            cout << endl;
+        }
+        else
+        {
+            cout << "Wrong page" << endl;
+        }
+    }
+
+    template <typename T>
+    void compression()
+    {
+        {
+            Flist tmp((char *) "tmp.bin");
+            seekg(2 * sizeof(int));
+            int length = len();
+
+            for (int i = 1; i <= length; ++i)
+            {
+                tmp.add(extr<T>(i));
+            }
+        }
+
+        close();
+
+        if (remove(name))
+        {
+            cerr << "Can't remove " << name;
+            exit(2);
+        }
+
+        if (rename("tmp.bin", name))
+        {
+            cerr << "Can't rename file tmp.bin";
+            exit(3);
+        }
+
+        open(name, ios::binary | ios::out | ios::in | ios::ate);
+        if (!*this)
+        {
+            cerr << "Can't open " << name;
+            exit(1);
+        }
+    }
+
+    template <typename T>
+    void insWithOrder(T& data)
+    {
+        *this << data;
+        this->sort<T>();
     }
 
     Flist  &operator<<(char &);

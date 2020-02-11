@@ -20,8 +20,6 @@ public:
     friend istream &operator>>(istream &is, String &s);
     int length() const;
 
-
-    // ~
     char operator[](const int &) const;
 
     void addStr(Flist &) const;
