@@ -27,11 +27,13 @@ istream &operator>>(istream &is, RentalData::DateAndTime &dt) {
     return is;
 }
 
-ostream &operator<<(ostream &os, RentalData::DateAndTime &dt) {
-    cout << setw(2) << setfill('0') << dt.day << '.';
-    cout << setw(2) << setfill('0') << dt.mon << '.';
-    cout << dt.year << ' ';
-    cout << setw(2) << setfill('0') << dt.hour;
+ostream &operator<<(ostream &os, const RentalData::DateAndTime &dt) {
+    if (dt.day > 0) {
+        cout << setw(2) << setfill('0') << dt.day << '.';
+        cout << setw(2) << setfill('0') << dt.mon << '.';
+        cout << dt.year << ' ';
+        cout << setw(2) << setfill('0') << dt.hour;
+    }
     return os;
 }
 
@@ -72,7 +74,11 @@ istream &operator>>(istream &is, RentalData &rd) {
 }
 
 ostream &operator<<(ostream &os, const RentalData &rd) {
-    cout << "Item: ";
+    cout << "\tItem: " << rd.item << endl;
+    cout << "\tCost: " << rd.cost << endl;
+    cout << "\tDate&time of receipt: " << rd.get << endl;
+    cout << "\tDate&time of return: " << rd.retrieve << endl;
+    cout << "\tSurname: " << rd.surname << endl;
     return os;
 }
 

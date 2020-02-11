@@ -19,7 +19,7 @@ public:
         // ~
         friend istream &operator>>(istream &, DateAndTime &);
 
-        friend ostream &operator<<(ostream &, DateAndTime &);
+        friend ostream &operator<<(ostream &, const DateAndTime &);
 
         friend Flist &operator>>(Flist &, DateAndTime &);
 
@@ -37,6 +37,8 @@ private:
     DateAndTime get;
     DateAndTime retrieve;
     String surname;
+
+
 
 
 public:

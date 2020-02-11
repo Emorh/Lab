@@ -116,8 +116,15 @@ void Menu(Flist& list)
 int main() {
     Flist list;
 
-    //Menu<int>(list);
+    RentalData rd;
+    cin >> rd;
+    list << rd;
+    RentalData rd1;
+    list.Set(1);
+    list >> rd1;
+    cout << rd1;
 
+    Menu<int>(list);
 
     return 0;
 }
