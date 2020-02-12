@@ -1,6 +1,3 @@
-//
-// Created by gefre on 11.02.2020.
-//
 #include <cstring>
 #include "String.h"
 
@@ -28,7 +25,6 @@ istream &operator>>(istream &is, String &s) {
 
 int String::length() const { return len; }
 
-// ~
 char String::operator[](const int &n) const {
     if (n >= 0 && n < len) {
         return str[n];
@@ -67,4 +63,21 @@ Flist &operator<<(Flist &of, const String &s) {
     of << l;
     s.addStr(of);
     return of;
+}
+
+bool String::operator==(String &str)
+{
+    if (len != str.len)
+    {
+        return false;
+    }
+    for (int i = 0; i < len; ++i)
+    {
+        if (this->str[i] != str.str[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
 }

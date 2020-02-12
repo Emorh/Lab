@@ -1,7 +1,3 @@
-//
-// Created by gefre on 10.02.2020.
-//
-
 #ifndef PIV_FLIST_H
 #define PIV_FLIST_H
 

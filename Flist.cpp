@@ -1,7 +1,3 @@
-//
-// Created by gefre on 10.02.2020.
-//
-
 #include <iostream>
 #include "Flist.h"
 #include "cstring"
@@ -179,9 +175,3 @@ double &Flist::operator>>(double & val)
     val = fread<double>();
     return val;
 }
-
-
-
-
-
-

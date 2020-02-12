@@ -1,12 +1,7 @@
-
-//#include <iostream>
 #include <iomanip>
 #include "RentalData.h"
 #include "String.h"
 
-//using namespace std;
-
-// ~
 istream &operator>>(istream &is, RentalData::DateAndTime &dt) {
     char c;
     cout << "\tDay, month and year in the format 31.01.2020: ";
@@ -44,20 +39,9 @@ Flist &operator>>(Flist &ifl, RentalData::DateAndTime &dt) {
     ifl >> dt.hour;
     return ifl;
 }
-// ~
 
 RentalData::RentalData() : item(), cost(0.0), get(), retrieve(), surname() {}
 
-void RentalData::extr(Flist &list, int &num, RentalData& data)
-{
-    if (list.len() == 0 || num < 1 || num > list.len())
-    {
-        throw "Array index of range";                          /////////////////////////////////// Изменить
-    }
-
-}
-
-// ~
 istream &operator>>(istream &is, RentalData &rd) {
     cout << endl;
     cout << "\tRental item: ";
@@ -109,4 +93,3 @@ Flist &operator<<(Flist &of, const RentalData &rd) {
     rd.surname.addStr(of);
     return of;
 }
-// ~
