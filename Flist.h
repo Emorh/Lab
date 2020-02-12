@@ -234,7 +234,8 @@ public:
 
             for (int i = 1; i <= length; ++i)
             {
-                tmp.add(extr<T>(i));
+                //tmp.add(extr<T>(i));
+                tmp << extr<T>(i);
             }
         }
 

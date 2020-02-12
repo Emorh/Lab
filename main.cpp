@@ -77,7 +77,7 @@ void Menu(Flist& list)
                 if (len != 0) {
                     cout << "Enter a number up to " << len << ": ";
                     cin >> num;
-                    if (num < 1 || num > 1) {
+                    if (num < 1 || num > len + 1) {
                         cout << "Wrong number" << endl;
                     } else {
                         cout << "Сhange the data " << list.extr<T>(num) << " to (enter a new data): ";
@@ -116,15 +116,7 @@ void Menu(Flist& list)
 int main() {
     Flist list;
 
-    RentalData rd;
-    cin >> rd;
-    list << rd;
-    RentalData rd1;
-    list.Set(1);
-    list >> rd1;
-    cout << rd1;
-
-    Menu<int>(list);
+    Menu<RentalData>(list);
 
     return 0;
 }
