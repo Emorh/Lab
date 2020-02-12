@@ -8,9 +8,15 @@ int Flist::len()
     return fread<int>();
 }
 template <typename T>
-void Flist::fwrite(const T val)
+void Flist::fwrite(const T &val)
 {
     this->write((char *) &val, sizeof(val));
+}
+template <typename T>
+T Flist::fread() {
+    T val;
+    this->read((char *) &val, sizeof(val));
+    return val;
 }
 template <typename T>
 void Flist::add(const T &dat) { // Добавление в конец списка
@@ -46,19 +52,20 @@ void Flist::add(const T &dat) { // Добавление в конец списк
     fwrite(dat); // Данные первого
 }
 
-void Flist::Set(int index)
+
+void Flist::Set(const int &num)
 {
-    if (len() == 0 || index < 1 || index > len())
+    if (len() == 0 || num < 1 || num > len())
     {
         throw "Index out of range";
     }
     // Извлечение последнего -- отдельный случай для ускорения
-    if (index == len()) {
+    if (num == len()) {
         seekg(sizeof(int));
         seekg(fread<int>() + sizeof(int));
     } else {
         seekg(0);
-        for (int i = 1; i <= index; ++i) {
+        for (int i = 1; i <= num; ++i) {
             seekg(fread<int>());
         }
         seekg(sizeof(int), ios::cur);
@@ -103,25 +110,25 @@ Flist::~Flist()
     close();
 }
 
-Flist &Flist::operator<<(char &val)
+Flist &Flist::operator<<(const char &val)
 {
     add<char>(val);
     return *this;
 }
 
-Flist &Flist::operator<<(short &val)
+Flist &Flist::operator<<(const short &val)
 {
     add<short>(val);
     return *this;
 }
 
-Flist &Flist::operator<<(int &val)
+Flist &Flist::operator<<(const int &val)
 {
     add<int>(val);
     return *this;
 }
 
-Flist &Flist::operator<<(double &val)
+Flist &Flist::operator<<(const double &val)
 {
     add<double>(val);
     return *this;

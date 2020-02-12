@@ -10,9 +10,13 @@ class String {
 
 public:
     String();
+    String(const String &str);
+    String(char str[]);
     ~String();
-    friend istream &operator>>(istream &is, String &s);
+
     int length() const;
+
+    friend istream &operator>>(istream &is, String &s);
 
     char operator[](const int &) const;
 

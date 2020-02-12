@@ -2,7 +2,13 @@
 #include "RentalData.h"
 #include "String.h"
 
-istream &operator>>(istream &is, RentalData::DateAndTime &dt) {
+RentalData::RentalData() : item(), cost(0.0), get(), retrieve(), surname() {}
+
+String RentalData::getItem() const { return item; }
+
+double  RentalData::getCost() const { return cost; }
+
+void RentalData::inDT(RentalData::DateAndTime &dt) {
     char c;
     cout << "\tDay, month and year in the format 31.01.2020: ";
     cin >> dt.day;
@@ -18,29 +24,24 @@ istream &operator>>(istream &is, RentalData::DateAndTime &dt) {
         dt.year = -1;
         dt.hour = -1;
     }
-
-    return is;
 }
 
-ostream &operator<<(ostream &os, const RentalData::DateAndTime &dt) {
+void RentalData::outDT(const RentalData::DateAndTime &dt) const {
     if (dt.day > 0) {
         cout << setw(2) << setfill('0') << dt.day << '.';
         cout << setw(2) << setfill('0') << dt.mon << '.';
         cout << dt.year << ' ';
         cout << setw(2) << setfill('0') << dt.hour;
     }
-    return os;
+    cout << endl;
 }
 
-Flist &operator>>(Flist &ifl, RentalData::DateAndTime &dt) {
+void RentalData::finDT(Flist &ifl, RentalData::DateAndTime &dt) {
     ifl >> dt.day;
     ifl >> dt.mon;
     ifl >> dt.year;
     ifl >> dt.hour;
-    return ifl;
 }
-
-RentalData::RentalData() : item(), cost(0.0), get(), retrieve(), surname() {}
 
 istream &operator>>(istream &is, RentalData &rd) {
     cout << endl;
@@ -49,9 +50,9 @@ istream &operator>>(istream &is, RentalData &rd) {
     cout << "\tCost: ";
     cin >> rd.cost;
     cout << "\tEnter date and time of receipt" << endl;
-    cin >> rd.get;
+    rd.inDT(rd.get);
     cout << "\tEnter date and time of return" << endl;
-    cin >> rd.retrieve;
+    rd.inDT(rd.retrieve);
     cout << "\tSurname: ";
     cin >> rd.surname;
     return is;
@@ -60,8 +61,10 @@ istream &operator>>(istream &is, RentalData &rd) {
 ostream &operator<<(ostream &os, const RentalData &rd) {
     cout << "\tItem: " << rd.item << endl;
     cout << "\tCost: " << rd.cost << endl;
-    cout << "\tDate&time of receipt: " << rd.get << endl;
-    cout << "\tDate&time of return: " << rd.retrieve << endl;
+    cout << "\tDate&time of receipt: ";
+    rd.outDT(rd.get);
+    cout << "\tDate&time of return: ";
+    rd.outDT(rd.retrieve);
     cout << "\tSurname: " << rd.surname << endl;
     return os;
 }
@@ -69,8 +72,8 @@ ostream &operator<<(ostream &os, const RentalData &rd) {
 Flist &operator>>(Flist &ifl, RentalData &rd) {
     ifl >> rd.item;
     ifl >> rd.cost;
-    ifl >> rd.get;
-    ifl >> rd.retrieve;
+    rd.finDT(ifl, rd.get);
+    rd.finDT(ifl, rd.retrieve);
     ifl >> rd.surname;
     return ifl;
 }
@@ -92,4 +95,14 @@ Flist &operator<<(Flist &of, const RentalData &rd) {
     of.fwrite(rd.surname.length());
     rd.surname.addStr(of);
     return of;
+}
+int RentalData::getGetMon() const {
+    return get.mon;
+}
+int RentalData::getGetYear() const {
+    return get.year;
+}
+
+int RentalData::getRetrieveDay() const {
+    return retrieve.day;
 }

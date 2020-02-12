@@ -1,6 +1,27 @@
-#include <iostream>
-#include "Flist.h"
+#include <iomanip>
 #include "RentalData.h"
+
+double calcOfAmountGoods(Flist &fl, String &s) {
+    double sum = 0;
+    for (int i = 1; i <= fl.len(); ++i) {
+        auto elem = fl.extr<RentalData>(i);
+        if (elem.getItem() == s && elem.getRetrieveDay() > 0) {
+            sum += elem.getCost();
+        }
+    }
+    return sum;
+}
+
+double monthlyIncome(Flist &fl, int mon, int year) {
+    double sum = 0;
+    for (int i = 1; i <= fl.len(); ++i) {
+        auto elem = fl.extr<RentalData>(i);
+        if (elem.getGetMon() == mon && elem.getGetYear() == year && elem.getRetrieveDay() > 0) {
+            sum += elem.getCost();
+        }
+    }
+    return sum;
+}
 
 void printMenu() {
     cout << ">Select an action:" << endl;
@@ -16,73 +37,74 @@ void printMenu() {
     cout << "\t0. Exit" << endl;
 }
 
-template <typename T>
-void Menu(Flist& list)
-{
+template<typename T>
+void menu(Flist &fl) {
     char c;
-
     do {
         printMenu();
         cin >> c;
 
         T data;
-        int num, len = list.len();
+        int ind, len = fl.len();
 
         switch (c) {
             case '1':
                 cout << "Enter a data: ";
                 cin >> data;
-                list << data;
+                fl << data;
                 cout << "Data added" << endl;
                 break;
+
             case '2':
                 if (len != 0) {
                     cout << "Enter a number up to " << len << ": ";
-                    cin >> num;
-                    if (num < 1 || num > len) {
+                    cin >> ind;
+                    if (ind < 1 || ind > len) {
                         cout << "Wrong number" << endl;
                     } else {
-                        cout << "Extracted: " << list.extr<T>(num) << endl;
+                        cout << "Extracted: " << fl.extr<T>(ind) << endl;
                     }
                 } else {
                     cout << "List is empty" << endl;
                 }
                 break;
+
             case '3':
                 if (len != 0) {
                     cout << "Enter a number up to " << len << ": ";
-                    cin >> num;
-                    if (num < 1 || num > len) {
+                    cin >> ind;
+                    if (ind < 1 || ind > len) {
                         cout << "Wrong number" << endl;
                     } else {
-                        cout << "Deleted: " << list.del<T>(num) << endl;
+                        cout << "Deleted: " << fl.del<T>(ind) << endl;
                     }
                 } else {
                     cout << "List is empty" << endl;
                 }
                 break;
+
             case '4':
                 cout << "Enter a number up to " << len + 1 << ": ";
-                cin >> num;
-                if (num < 1 || num > len + 1) {
+                cin >> ind;
+                if (ind < 1 || ind > len + 1) {
                     cout << "Wrong number" << endl;
                 } else {
                     cout << "Enter a data: ";
                     cin >> data;
-                    list.insByNum(num, data);
+                    fl.insByNum(ind, data);
                     cout << "Data inserted" << endl;
                 }
                 break;
             case '5':
                 if (len != 0) {
                     cout << "Enter a number up to " << len << ": ";
-                    cin >> num;
-                    if (num < 1 || num > len + 1) {
+                    cin >> ind;
+                    if (ind < 1 || ind > len + 1) {
                         cout << "Wrong number" << endl;
                     } else {
-                        cout << "Сhange the data " << list.extr<T>(num) << " to (enter a new data): ";
+                        cout << "Сhange the data " << fl.extr<T>(ind) << " to (enter a new data): ";
                         cin >> data;
-                        list.edit(num, data);
+                        fl.edit(ind, data);
                         cout << "Data edited" << endl;
                     }
                 } else {
@@ -92,31 +114,39 @@ void Menu(Flist& list)
             case '6':
                 cout << "Enter a data: ";
                 cin >> data;
-                list.insWithOrder(data);
+                fl.insWithOrder(data);
                 cout << "Data added" << endl;
                 break;
             case '7':
-                list.sort<T>();
+                fl.sort<T>();
                 cout << "List sorted" << endl;
                 break;
             case '8':
                 int page;
                 cout << "Enter a page: ";
                 cin >> page;
-                list.pageView<T>(page);
+                fl.pageView<T>(page);
                 break;
             case '9':
-                list.compression<T>();
+                fl.compression<T>();
                 cout << "List is compressed" << endl;
+            default:
+                cout << endl;
         }
     } while (c != '0');
 
+
+    static_assert(!is_integral<T>::value && !is_floating_point<T>::value,
+                  "Only RentalData class! Please comment code");
+    String item((char *)"Pupik");
+    cout << "Amount of payment for the " << item << ": " << calcOfAmountGoods(fl, item) << endl;
+
+    int mon = 1, year = 2020;
+    cout << setw(2) << setfill('0') << mon << '.' << year << " income: " << monthlyIncome(fl, mon, year) << endl;
 }
 
 int main() {
     Flist list;
-
-    Menu<RentalData>(list);
-
+    menu<RentalData>(list);
     return 0;
 }

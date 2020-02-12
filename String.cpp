@@ -8,6 +8,17 @@ String::~String()
 
 String::String() : len(0), str(nullptr) {}
 
+String::String(const String &str)
+{
+    len = str.len;
+    this->str = new char[len + 1];
+    for (int i = 0; i < len; ++i)
+    {
+        this->str[i] = str.str[i];
+    }
+    this->str[len] = '\0';
+}
+
 istream &operator>>(istream &is, String &s) {
     char tmp[64];
     is >> tmp;
@@ -80,4 +91,10 @@ bool String::operator==(String &str)
     }
 
     return true;
+}
+
+String::String(char s[]) {
+    len = strlen(s);
+    str = new char[len + 1];
+    strcpy(str, s);
 }
