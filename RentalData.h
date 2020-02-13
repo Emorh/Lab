@@ -1,13 +1,13 @@
+// RentalData.h -- класс элемента базы данных проката
+
 #ifndef PIV_RENTALDATA_H
 #define PIV_RENTALDATA_H
 
 #include "String.h"
-#include "Flist.h"
 
 class RentalData {
-private:
     struct DateAndTime {
-        short day; // попробовать сделать char-ы
+        short day;
         short mon;
         short year;
         short hour;
@@ -18,36 +18,34 @@ private:
     DateAndTime retrieve;
     String surname;
 
-    void inDT(DateAndTime &);
-
     void outDT(const DateAndTime &) const;
+
+    void inDT(DateAndTime &);
 
     void finDT(Flist &, DateAndTime &);
 
 public:
     RentalData();
 
-    String getItem() const;
+    bool operator>(const RentalData &) const;
 
-    double getCost() const;
+    [[nodiscard]] String getItem() const;
 
-    int getGetMon() const;
+    [[nodiscard]] double getCost() const;
 
-    int getGetYear() const;
+    [[nodiscard]] int getGetMon() const;
 
-    int getRetrieveDay() const;
+    [[nodiscard]] int getGetYear() const;
 
-    bool operator>(RentalData &dt) { return cost > dt.cost; }
-
-    friend istream &operator>>(istream &, RentalData &);
+    [[nodiscard]] int getRetrieveDay() const;
 
     friend ostream &operator<<(ostream &, const RentalData &);
 
-    friend Flist &operator>>(Flist &, RentalData &);
+    friend istream &operator>>(istream &, RentalData &);
 
     friend Flist &operator<<(Flist &, const RentalData &);
 
-
+    friend Flist &operator>>(Flist &, RentalData &);
 };
 
 #endif //PIV_RENTALDATA_H

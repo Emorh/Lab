@@ -1,3 +1,5 @@
+// String.h
+
 #ifndef PIV_STRING_H
 #define PIV_STRING_H
 
@@ -7,28 +9,27 @@
 class String {
     int len;
     char *str;
-
 public:
     String();
-    String(const String &str);
-    String(char str[]);
+    explicit String(char []);
+    String(const String &);
     ~String();
-
-    int length() const;
-
-    friend istream &operator>>(istream &is, String &s);
 
     char operator[](const int &) const;
 
-    void addStr(Flist &) const;
+    bool operator==(const String &s) const;
 
-    bool operator==(String& str);
+    [[nodiscard]] int length() const;
+
+    void addStr(Flist &) const;
 
     friend ostream &operator<<(ostream &, const String &);
 
-    friend Flist &operator>>(Flist &, String &);
+    friend istream &operator>>(istream &is, String &s);
 
     friend Flist &operator<<(Flist &, const String &);
+
+    friend Flist &operator>>(Flist &, String &);
 };
 
 #endif //PIV_STRING_H

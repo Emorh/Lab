@@ -1,89 +1,20 @@
+// File.cpp
+
+#include <cstring>
 #include <iostream>
 #include "Flist.h"
-#include "cstring"
 
-int Flist::len()
-{
-    seekg(sizeof(int) * 2);
-    return fread<int>();
-}
-template <typename T>
-void Flist::fwrite(const T &val)
-{
-    this->write((char *) &val, sizeof(val));
-}
-template <typename T>
-T Flist::fread() {
-    T val;
-    this->read((char *) &val, sizeof(val));
-    return val;
-}
-template <typename T>
-void Flist::add(const T &dat) { // Добавление в конец списка
-    this->seekg(0);
-
-    if (fread<int>() != 0) { // Список не пуст
-        // Узнать, на каком элементе (на какой позиции) заканчивается список
-        this->seekg(sizeof(int));
-        int penultimatePos = fread<int>();
-        // Обновление позиции конца списка
-        this->seekg(0, ios::end);
-        int lastPos = this->tellg();
-        this->seekp(sizeof(int));
-        fwrite(lastPos);
-        // Обновление длины списка
-        this->seekg(sizeof(int) * 2);
-        int lenMinOne = fread<int>();
-        this->seekp(sizeof(int) * 2);
-        fwrite(lenMinOne + 1);
-        // Обновление предпоследнего элемента, чтобы он знал, где находится следующий за ним
-        this->seekp(penultimatePos);
-        fwrite(lastPos);
-        this->seekp(0, ios::end);
-        // Добавление нового последнего элемента
-    }  else  { // Список пуст
-        this->seekp(0);
-        fwrite(sizeof(int) * 3); // Начало списка
-        fwrite(sizeof(int) * 3); // Конец
-        fwrite(1); // Длина
-    }
-
-    fwrite(0); // Указатель на следующий за первым
-    fwrite(dat); // Данные первого
-}
-
-
-void Flist::Set(const int &num)
-{
-    if (len() == 0 || num < 1 || num > len())
-    {
-        throw "Index out of range";
-    }
-    // Извлечение последнего -- отдельный случай для ускорения
-    if (num == len()) {
-        seekg(sizeof(int));
-        seekg(fread<int>() + sizeof(int));
-    } else {
-        seekg(0);
-        for (int i = 1; i <= num; ++i) {
-            seekg(fread<int>());
-        }
-        seekg(sizeof(int), ios::cur);
-    }
-}
-
-Flist::Flist(char name[])
-{
-    this->name = new char[strlen(name) + 1];
-    for (int i = 0; i < strlen(name); ++i)
-    {
+Flist::Flist(char name[]) {
+    int len = strlen(name);
+    this->name = new char[len + 1];
+    for (size_t i = 0; i < len; ++i) {
         this->name[i] = name[i];
     }
-    this->name[strlen(name)] = '\0';
+    this->name[len] = '\0';
 
     open(name, ios::binary | ios::out | ios::in | ios::ate);
 
-    if (!(*this))                 // Если есть какие-то проблемы с файлом
+    if (!*this)                // Если есть какие-то проблемы с файлом
     {
         ofstream tmp(name);    // Пробуем создать его (вдруг его не существовало)
         tmp.close();
@@ -99,41 +30,127 @@ Flist::Flist(char name[])
     // Если файл пустой
     if (tellg() == 0) {
         for (int i = 0; i < 3; ++i) {
-            this->fwrite(0);
+            fwrite(0);
         }
     }
 }
 
-Flist::~Flist()
-{
+Flist::~Flist() {
     delete[] name;
     close();
 }
 
-Flist &Flist::operator<<(const char &val)
-{
-    add<char>(val);
+template<typename T>
+void Flist::fwrite(const T &val) {
+    write((char *) &val, sizeof(val));
+}
+
+template<typename T>
+T Flist::fread() {
+    T val;
+    read((char *) &val, sizeof(val));
+    return val;
+}
+
+template<typename T>
+void Flist::add(const T &elem) { // Добавление в конец списка
+    seekg(0);
+    if (fread<int>() != 0) { // Список не пуст
+        // Узнать, на каком элементе (на какой позиции) заканчивается список
+        seekg(sizeof(int));
+        int penultimatePos = fread<int>();
+        // Обновление позиции конца списка
+        seekg(0, ios::end);
+        int lastPos = tellg();
+        seekp(sizeof(int));
+        fwrite(lastPos);
+        // Обновление длины списка
+        seekg(sizeof(int) * 2);
+        int lenMinOne = fread<int>();
+        seekp(sizeof(int) * 2);
+        fwrite(lenMinOne + 1);
+        // Обновление предпоследнего элемента, чтобы он знал, где находится следующий за ним
+        seekp(penultimatePos);
+        fwrite(lastPos);
+        seekp(0, ios::end);
+    } else { // Список пуст
+        seekp(0);
+        fwrite(sizeof(int) * 3); // Начало списка
+        fwrite(sizeof(int) * 3); // Конец
+        fwrite(1); // Длина
+    }
+    // Добавление нового элемента
+    fwrite(0); // Указатель на следующий за первым
+    fwrite(elem); // Данные первого
+}
+
+int Flist::len() {
+    seekg(sizeof(int) * 2);
+    return fread<int>();
+}
+
+void Flist::Set(const int &ind) {
+    int len = this->len();
+    if (len == 0 || ind < 1 || ind > len) {
+        throw "Index out of range";
+    }
+    // Извлечение последнего -- отдельный случай для ускорения
+    if (ind == len) {
+        seekg(sizeof(int));
+        seekg(fread<int>() + sizeof(int));
+    } else {
+        seekg(0);
+        for (int i = 1; i <= ind; ++i) {
+            seekg(fread<int>());
+        }
+        seekg(sizeof(int), ios::cur);
+    }
+}
+
+Flist &Flist::operator<<(const char &elem) {
+    add<char>(elem);
     return *this;
 }
 
-Flist &Flist::operator<<(const short &val)
-{
-    add<short>(val);
+Flist &Flist::operator<<(const short &elem) {
+    add<short>(elem);
     return *this;
 }
 
-Flist &Flist::operator<<(const int &val)
-{
-    add<int>(val);
+Flist &Flist::operator<<(const int &elem) {
+    add<int>(elem);
     return *this;
 }
 
-Flist &Flist::operator<<(const double &val)
-{
-    add<double>(val);
+Flist &Flist::operator<<(const double &elem) {
+    add<double>(elem);
     return *this;
 }
 
+char &Flist::operator>>(char &elem) {
+    elem = fread<char>();
+    return elem;
+}
+
+short &Flist::operator>>(short &elem) {
+    elem = fread<short>();
+    return elem;
+}
+
+int &Flist::operator>>(int &elem) {
+    elem = fread<int>();
+    return elem;
+}
+
+double &Flist::operator>>(double &elem) {
+    elem = fread<double>();
+    return elem;
+}
+
+//                   <---->
+// | left | -> | mid | -> | right | -> | rNext | -> ...
+// (lPrev)     (left)     (mid)        (right)
+// Нужно свопнуть mid и right
 void Flist::swap(const int &lPrev) {
     int left, mid, right;
     seekg(lPrev);
@@ -157,28 +174,4 @@ void Flist::swap(const int &lPrev) {
         seekp(sizeof(int));
         fwrite(left);
     }
-}
-
-char &Flist::operator>>(char & val)
-{
-    val = fread<char>();
-    return val;
-}
-
-short &Flist::operator>>(short & val)
-{
-    val = fread<short>();
-    return val;
-}
-
-int &Flist::operator>>(int & val)
-{
-    val = fread<int>();
-    return val;
-}
-
-double &Flist::operator>>(double & val)
-{
-    val = fread<double>();
-    return val;
 }

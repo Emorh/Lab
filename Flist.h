@@ -1,38 +1,50 @@
+// Flist.h -- File List
+
 #ifndef PIV_FLIST_H
 #define PIV_FLIST_H
 
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
 class Flist : fstream {
-    char* name;
-    const int numOfRecords = 8;
+    char *name;
 
-    template <typename T>
+    template<typename T>
     void add(const T &);
 
     void Set(const int &);
 
 public:
-    explicit Flist(char name[] = (char*)"data.bin");
+    const int numOfRecords = 8;
 
+    explicit Flist(char name[] = (char *) "data.bin");
     ~Flist() override;
 
-    template <typename T>
+    template<typename T>
     void fwrite(const T &);
 
-    template <typename T>
+    template<typename T>
     T fread();
 
     int len();
 
+    Flist  &operator<<(const char &);
+    Flist  &operator<<(const short &);
+    Flist  &operator<<(const int &);
+    Flist  &operator<<(const double &);
 
-    template <typename T>
-    T extr(const int &ind)
-    {
-        if (ind < 1 || ind > len())
-        {
+    char   &operator>>(char &);
+    short  &operator>>(short &);
+    int    &operator>>(int &);
+    double &operator>>(double &);
+
+    void swap(const int &);
+
+    template<typename T>
+    T extr(const int &ind) {
+        if (ind < 1 || ind > len()) {
             throw "Index out of range";
         }
         Set(ind);
@@ -41,10 +53,9 @@ public:
         return tmp;
     }
 
-    template <typename T>
+    template<typename T>
     T del(const int &ind) {
-        if (ind < 1 || ind > len())
-        {
+        if (ind < 1 || ind > len()) {
             throw "Index out of range";
         }
 
@@ -75,7 +86,7 @@ public:
         return ans;
     }
 
-    template <typename T>
+    template<typename T>
     void insByNum(const int &ind, T &elem) {
         if (len() + 1 < ind || ind < 1) {
             throw "Index out of range";
@@ -86,70 +97,65 @@ public:
             return;
         }
 
+        int prevPos, curPos, nextPos, lastPos;
         seekg(sizeof(int));
-        int last_pos = fread<int>();
+        lastPos = fread<int>();
         seekg(0, ios::end);
-        int cur_pos = tellg();
+        curPos = tellg();
 
         if (ind == 1) {
             seekg(0);
-            int next_pos = fread<int>();
+            nextPos = fread<int>();
 
             *this << elem;
             seekp(0);
-            fwrite(cur_pos);
-            fwrite(last_pos);
+            fwrite(curPos);
+            fwrite(lastPos);
 
-            seekp(last_pos);
+            seekp(lastPos);
             fwrite((int) 0);
 
-            seekp(cur_pos);
-            fwrite(next_pos);
+            seekp(curPos);
+            fwrite(nextPos);
             return;
         }
         Set(ind - 1);
         seekg(-sizeof(int), ios::cur);
-        int prev_pos = tellg();
-        seekg(prev_pos);
-        int next_pos = fread<int>();
+        prevPos = tellg();
+        seekg(prevPos);
+        nextPos = fread<int>();
 
         *this << elem;
 
         seekp(sizeof(int));
-        fwrite(last_pos);
+        fwrite(lastPos);
 
-        seekp(prev_pos);
-        fwrite(cur_pos);
+        seekp(prevPos);
+        fwrite(curPos);
 
-        seekp(last_pos);
+        seekp(lastPos);
         fwrite((int) 0);
 
-        seekp(cur_pos);
-        fwrite(next_pos);
+        seekp(curPos);
+        fwrite(nextPos);
     }
 
     template<typename T>
-    void edit(const int &num, T &dat) {
+    void edit(const int &ind, T &elem) {
         int len = this->len();
-        if (len == 0 || len < num) {
+        if (len == 0 || len < ind) {
             throw "Index out of range";
         }
 
-        T tmp = this->del<T>(num);
-
-        if (sizeof(dat) > sizeof(tmp))
-        {
-            *this << dat;
-        }
-        else
-        {
-            insByNum(num, dat);
+        T tmp = del<T>(ind);
+        if (sizeof(elem) > sizeof(tmp)) {
+            *this << elem;
+        } else {
+            insByNum(ind, elem);
         }
     }
 
-    void swap(const int &lPrev) ;
-
-    template <typename T>
+    template<typename T>
     void sort() {
         int len = this->len();
         if (len < 2) {
@@ -171,7 +177,7 @@ public:
 
             for (int i = 1; i <= len - j; ++i) {
                 if (lVal > rVal) {
-                    this->swap(lPrevPos);
+                    swap(lPrevPos);
                     flag = true;
                 }
                 // Сдвиг пузыря
@@ -195,77 +201,51 @@ public:
         }
     }
 
-    template <typename T>
-    void pageView(const int& num)
-    {
-        if (len() > (num - 1) * numOfRecords)
-        {
-            cout << "----------Page " << num << "----------" << endl;
-            for (int i = (num - 1) * numOfRecords; i < len() && i < numOfRecords * num; ++i)
-            {
-                cout << this->extr<T>(i + 1) << " ";
-            }
-            cout << endl;
-        }
-        else
-        {
-            cout << "Wrong page" << endl;
-        }
+    template<typename T>
+    void insWithOrder(const T &elem) {
+        *this << elem;
+        sort<T>();
     }
 
-    template <typename T>
-    void compression()
-    {
+    template<typename T>
+    void pageView(const int &ind) {
+        if (len() <= (ind - 1) * numOfRecords) {
+            throw "Page out of range";
+        }
+        cout << "Page " << ind << ':' << endl;
+        for (int i = (ind - 1) * numOfRecords; i < len() && i < numOfRecords * ind; ++i) {
+            cout << setw(49) << setfill('-') << '-' << endl;
+            cout << extr<T>(i + 1);
+        }
+        cout << setw(49) << setfill('-') << '-' << endl;
+    }
+
+    template<typename T>
+    void compress() {
         {
             Flist tmp((char *) "tmp.bin");
             seekg(2 * sizeof(int));
-            int length = len();
-
-            for (int i = 1; i <= length; ++i)
-            {
-//                tmp.add(extr<T>(i));
-                 tmp << extr<T>(i);
+            int len = this->len();
+            for (int i = 1; i <= len; ++i) {
+                tmp << extr<T>(i);
             }
         }
-
         close();
 
-        if (remove(name))
-        {
+        if (remove(name)) {
             cerr << "Can't remove " << name;
             exit(2);
         }
-
-        if (rename("tmp.bin", name))
-        {
+        if (rename("tmp.bin", name)) {
             cerr << "Can't rename file tmp.bin";
             exit(3);
         }
-
         open(name, ios::binary | ios::out | ios::in | ios::ate);
-        if (!*this)
-        {
+        if (!*this) {
             cerr << "Can't open " << name;
             exit(1);
         }
     }
-
-    template <typename T>
-    void insWithOrder(T& data)
-    {
-        *this << data;
-        this->sort<T>();
-    }
-
-    Flist  &operator<<(const char &);
-    Flist  &operator<<(const short &);
-    Flist  &operator<<(const int &);
-    Flist  &operator<<(const double &);
-
-    char   &operator>>(char &);
-    short  &operator>>(short &);
-    int    &operator>>(int &);
-    double &operator>>(double &);
 };
 
 

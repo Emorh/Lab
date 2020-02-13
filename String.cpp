@@ -1,22 +1,66 @@
+// String.cpp
+
 #include <cstring>
 #include "String.h"
 
-String::~String()
-{
+String::String() : len(0), str(nullptr) {}
+
+String::String(char s[]) {
+    len = strlen(s);
+    str = new char[len + 1];
+    if (str == nullptr) { // Обработка ошибки
+        len = 0;
+        return;
+    }
+    strcpy(str, s);
+}
+
+String::String(const String &s) {
+    str = new char[s.len + 1];
+    if (str == nullptr) { // Обработка ошибки
+        len = 0;
+        return;
+    }
+    for (int i = 0; i < s.len; ++i) {
+        str[i] = s.str[i];
+    }
+    str[s.len] = '\0';
+}
+
+String::~String() {
     delete[] str;
 }
 
-String::String() : len(0), str(nullptr) {}
-
-String::String(const String &str)
-{
-    len = str.len;
-    this->str = new char[len + 1];
-    for (int i = 0; i < len; ++i)
-    {
-        this->str[i] = str.str[i];
+char String::operator[](const int &n) const {
+    if (n >= 0 && n < len) {
+        return str[n];
     }
-    this->str[len] = '\0';
+    throw "String out of range";
+}
+
+bool String::operator==(const String &s) const {
+    if (len != s.len) {
+        return false;
+    }
+    for (int i = 0; i < len; ++i) {
+        if (str[i] != s.str[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int String::length() const { return len; }
+
+void String::addStr(Flist &of) const {
+    for (int i = 0; i < len; ++i) {
+        of.fwrite(str[i]);
+    }
+}
+
+ostream &operator<<(ostream &os, const String &s) {
+    cout << s.str;
+    return os;
 }
 
 istream &operator>>(istream &is, String &s) {
@@ -34,24 +78,12 @@ istream &operator>>(istream &is, String &s) {
     return is;
 }
 
-int String::length() const { return len; }
+Flist &operator<<(Flist &of, const String &s) {
 
-char String::operator[](const int &n) const {
-    if (n >= 0 && n < len) {
-        return str[n];
-    }
-    throw "String out of range";
-}
-
-void String::addStr(Flist &of) const {
-    for (int i = 0; i < len; ++i) {
-        of.fwrite(str[i]);
-    }
-}
-
-ostream &operator<<(ostream &os, const String &s) {
-    cout << s.str;
-    return os;
+    int l = s.length();
+    of << l;
+    s.addStr(of);
+    return of;
 }
 
 Flist &operator>>(Flist &ifl, String &s) {
@@ -66,35 +98,4 @@ Flist &operator>>(Flist &ifl, String &s) {
     }
     s.str[s.len] = '\0';
     return ifl;
-}
-
-Flist &operator<<(Flist &of, const String &s) {
-
-    int l = s.length();
-    of << l;
-    s.addStr(of);
-    return of;
-}
-
-bool String::operator==(String &str)
-{
-    if (len != str.len)
-    {
-        return false;
-    }
-    for (int i = 0; i < len; ++i)
-    {
-        if (this->str[i] != str.str[i])
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-String::String(char s[]) {
-    len = strlen(s);
-    str = new char[len + 1];
-    strcpy(str, s);
 }

@@ -1,4 +1,17 @@
-#include <iomanip>
+// Проект на курсовую по Программированию (3 семестр, 2 курс) Бисеровой Эвелины из группы ДТ-860.
+// Преподаватель: Васюткина И. А.
+// Тема "Динамические структуры данных в файле"
+
+// C++17, IDE -- CLion 2019.2.4
+// main.cpp
+
+// Возвращаемые коды программы (коды ошибок):
+// 1 -- невозможно открыть файл с бд
+// 2 -- невозможно удалить файл с бд
+// 3 -- невозможно переименовать файл с бд
+
+
+#include <cmath>
 #include "RentalData.h"
 
 double calcOfAmountGoods(Flist &fl, String &s) {
@@ -118,27 +131,32 @@ void menu(Flist &fl) {
                 cout << "Data added" << endl;
                 break;
             case '7':
-                fl.sort<T>();
+                fl.sort<T>(); // По стоимости
                 cout << "List sorted" << endl;
                 break;
             case '8':
                 int page;
-                cout << "Enter a page: ";
+                cout << "Enter a page to " << ceil((double)fl.len() / fl.numOfRecords) << " (";
+                cout << fl.numOfRecords << " elements per page): ";
                 cin >> page;
-                fl.pageView<T>(page);
+                if (page < 1 || fl.len() <= (page - 1) * fl.numOfRecords) {
+                    cout << "Wrong page" << endl;
+                } else {
+                    fl.pageView<T>(page);
+                }
                 break;
             case '9':
-                fl.compression<T>();
+                fl.compress<T>();
                 cout << "List is compressed" << endl;
             default:
                 cout << endl;
         }
     } while (c != '0');
 
-
+    // Закомментировать, если вносим int-ы!!!
     static_assert(!is_integral<T>::value && !is_floating_point<T>::value,
                   "Only RentalData class! Please comment code");
-    String item((char *)"Pupik");
+    String item((char *)"laptop");
     cout << "Amount of payment for the " << item << ": " << calcOfAmountGoods(fl, item) << endl;
 
     int mon = 1, year = 2020;
