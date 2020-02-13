@@ -89,7 +89,7 @@ int Flist::len() {
     return fread<int>();
 }
 
-void Flist::Set(const int &ind) {
+void Flist::set(const int &ind) {
     int len = this->len();
     if (len == 0 || ind < 1 || ind > len) {
         throw "Index out of range";
@@ -105,46 +105,6 @@ void Flist::Set(const int &ind) {
         }
         seekg(sizeof(int), ios::cur);
     }
-}
-
-Flist &Flist::operator<<(const char &elem) {
-    add<char>(elem);
-    return *this;
-}
-
-Flist &Flist::operator<<(const short &elem) {
-    add<short>(elem);
-    return *this;
-}
-
-Flist &Flist::operator<<(const int &elem) {
-    add<int>(elem);
-    return *this;
-}
-
-Flist &Flist::operator<<(const double &elem) {
-    add<double>(elem);
-    return *this;
-}
-
-char &Flist::operator>>(char &elem) {
-    elem = fread<char>();
-    return elem;
-}
-
-short &Flist::operator>>(short &elem) {
-    elem = fread<short>();
-    return elem;
-}
-
-int &Flist::operator>>(int &elem) {
-    elem = fread<int>();
-    return elem;
-}
-
-double &Flist::operator>>(double &elem) {
-    elem = fread<double>();
-    return elem;
 }
 
 //                   <---->
@@ -174,4 +134,44 @@ void Flist::swap(const int &lPrev) {
         seekp(sizeof(int));
         fwrite(left);
     }
+}
+
+Flist &Flist::operator<<(const char &elem) {
+    add<char>(elem);
+    return *this;
+}
+
+Flist &Flist::operator<<(const short &elem) {
+    add<short>(elem);
+    return *this;
+}
+
+Flist &Flist::operator<<(const int &elem) {
+    add<int>(elem);
+    return *this;
+}
+
+Flist &Flist::operator<<(const double &elem) {
+    add<double>(elem);
+    return *this;
+}
+
+Flist &Flist::operator>>(char &elem) {
+    elem = fread<char>();
+    return *this;
+}
+
+Flist &Flist::operator>>(short &elem) {
+    elem = fread<short>();
+    return *this;
+}
+
+Flist &Flist::operator>>(int &elem) {
+    elem = fread<int>();
+    return *this;
+}
+
+Flist &Flist::operator>>(double &elem) {
+    elem = fread<double>();
+    return *this;
 }

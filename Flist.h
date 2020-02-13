@@ -14,7 +14,9 @@ class Flist : fstream {
     template<typename T>
     void add(const T &);
 
-    void Set(const int &);
+    void set(const int &);
+
+    void swap(const int &);
 
 public:
     const int numOfRecords = 8;
@@ -35,19 +37,17 @@ public:
     Flist  &operator<<(const int &);
     Flist  &operator<<(const double &);
 
-    char   &operator>>(char &);
-    short  &operator>>(short &);
-    int    &operator>>(int &);
-    double &operator>>(double &);
-
-    void swap(const int &);
+    Flist &operator>>(char &);
+    Flist &operator>>(short &);
+    Flist &operator>>(int &);
+    Flist &operator>>(double &);
 
     template<typename T>
     T extr(const int &ind) {
         if (ind < 1 || ind > len()) {
             throw "Index out of range";
         }
-        Set(ind);
+        set(ind);
         T tmp;
         *this >> tmp;
         return tmp;
@@ -119,7 +119,7 @@ public:
             fwrite(nextPos);
             return;
         }
-        Set(ind - 1);
+        set(ind - 1);
         seekg(-sizeof(int), ios::cur);
         prevPos = tellg();
         seekg(prevPos);
