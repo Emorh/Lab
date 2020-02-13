@@ -16,6 +16,7 @@ String::String(char s[]) {
 }
 
 String::String(const String &s) {
+    len = s.len;
     str = new char[s.len + 1];
     if (str == nullptr) { // Обработка ошибки
         len = 0;

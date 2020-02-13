@@ -135,13 +135,17 @@ void menu(Flist &fl) {
                 break;
             case '8':
                 int page;
-                cout << "Enter a page to " << ceil((double)fl.len() / fl.numOfRecords) << " (";
-                cout << fl.numOfRecords << " elements per page): ";
-                cin >> page;
-                if (page < 1 || fl.len() <= (page - 1) * fl.numOfRecords) {
-                    cout << "Wrong page" << endl;
+                if (fl.len() != 0) {
+                    cout << "Enter a page to " << ceil((double) fl.len() / fl.numOfRecords) << " (";
+                    cout << fl.numOfRecords << " elements per page): ";
+                    cin >> page;
+                    if (page < 1 || fl.len() <= (page - 1) * fl.numOfRecords) {
+                        cout << "Wrong page" << endl;
+                    } else {
+                        fl.pageView<T>(page);
+                    }
                 } else {
-                    fl.pageView<T>(page);
+                    cout << "List is empty" << endl;
                 }
                 break;
             case '9':
@@ -155,7 +159,7 @@ void menu(Flist &fl) {
     // Закомментировать, если вносим int-ы!!!
     static_assert(!is_integral<T>::value && !is_floating_point<T>::value,
                   "Only RentalData class! Please comment code");
-    String item((char *)"laptop");
+    String item((char *)"Laptop");
     cout << "Amount of payment for the " << item << ": " << calcOfAmountGoods(fl, item) << endl;
 
     int mon = 1, year = 2020;
