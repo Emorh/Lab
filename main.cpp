@@ -1,9 +1,9 @@
+// main.cpp
 // Проект на курсовую по Программированию (3 семестр, 2 курс) Бисеровой Эвелины из группы ДТ-860.
 // Преподаватель: Васюткина И. А.
 // Тема "Динамические структуры данных в файле"
 
 // C++17, IDE -- CLion 2019.2.4
-// main.cpp
 
 // Возвращаемые коды программы (коды ошибок):
 // 1 -- невозможно открыть файл с бд
@@ -12,6 +12,7 @@
 
 #include <cmath>
 #include "RentalData.h"
+#include "TestInt.h"
 
 double calcOfAmountGoods(Flist &fl, String &s) {
     double sum = 0;
@@ -169,5 +170,9 @@ void menu(Flist &fl) {
 int main() {
     Flist list;
     menu<RentalData>(list);
+
+//    TestInt test(&list);
+//    cout << "Time to add in file a 10000 int (in sec): " << test.timeOfAdd() << endl;
+//    cout << "Time to sort in file a 10000 int (in sec): " << test.timeOfSort() << endl;
     return 0;
 }
